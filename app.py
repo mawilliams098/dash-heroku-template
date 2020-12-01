@@ -101,7 +101,8 @@ fig6 = px.box(gss_df, x='sex', y='income', color='sex',
 fig6.for_each_annotation(lambda a: a.update(text=a.text.replace("prestige_level=", "")))
 
 
-app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
+app = Dash(__name__, external_stylesheets=external_stylesheets)
+server = app.server
 
 colors = {
     'background': '#111111',
