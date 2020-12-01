@@ -6,7 +6,6 @@ import plotly.graph_objects as go
 import plotly.figure_factory as ff
 import dash
 from dash import Dash
-from jupyter_dash import JupyterDash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
@@ -14,7 +13,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 gss = pd.read_csv("https://github.com/jkropko/DS-6001/raw/master/localdata/gss2018.csv",
                  encoding='cp1252', na_values=['IAP','IAP,DK,NA,uncodeable', 'NOT SURE',
-                                               'DK', 'IAP, DK, NA, uncodeable', '.a', "CAN'T CHOOSE"])
+                                               'DK', 'IAP, DK, NA, uncodeable', '.a', "CAN'T CHOOSE"], 
+                 low_memory=False)
 
 mycols = ['id', 'wtss', 'sex', 'educ', 'region', 'age', 'coninc',
           'prestg10', 'mapres10', 'papres10', 'sei10', 'satjob',
@@ -39,7 +39,6 @@ gss_clean.age = gss_clean.age.astype('float')
 
 markdown_text = '''
 The gender wage gap is the average difference between the income for working men and women. Due to legal, social, and economic factors, women are considered to be paid less than men. According to [Wikipedia](https://en.wikipedia.org/wiki/Gender_pay_gap), "in the United States, for example, the non-adjusted average female's annual salary is 79% of the average male salary, compared to 95% for the adjusted average salary." An article from the [Economic Policy Institute](https://www.epi.org/publication/what-is-the-gender-pay-gap-and-is-it-real/) points out that the gender wage gap is often made a political issue, despite the fact that data supports the claim that a gender wage gap exists. This source also points out that in recent years the gap has been closing, and that data about the gender wage gap should be used carefully with clear goals in mind
-
 The GSS is the "General Social Survey" which collects data on current American society in order to monitor trends in attitudes and behaviors. The General Social Survey is often conducted through face-to-face interviews, and the GSS's goal is to make high-quality data easily accessible to anyone who wishes to use it.
 '''
 
@@ -102,7 +101,8 @@ fig6 = px.box(gss_df, x='sex', y='income', color='sex',
 fig6.for_each_annotation(lambda a: a.update(text=a.text.replace("prestige_level=", "")))
 
 
-app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
+app = Dash(__name__, external_stylesheets=external_stylesheets)
+server = app.server
 
 colors = {
     'background': '#111111',
